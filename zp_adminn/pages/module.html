@@ -1,0 +1,39 @@
+<style>
+	.cont{
+		height: 100%;
+	}
+</style>
+<div class="main">
+	<div class="layui-tab">
+		<ul class="layui-tab-title">
+		    <li class="layui-this">城市管理</li>
+		    <li>福利管理</li>
+		    <li>招聘管理</li>
+		    
+		</ul>
+		<!-- <div class="layui-tab-content">
+		    <div class="layui-tab-item layui-show">内容1</div>
+		    <div class="layui-tab-item">内容2</div>
+		    <div class="layui-tab-item">内容3</div>
+		    <div class="layui-tab-item">内容4</div>
+		    <div class="layui-tab-item">内容5</div>
+		</div> -->
+	</div>
+	<div id="cont" class="cont">
+		
+	</div>
+</div>
+<script>
+	$(function(){
+		$("#cont").load("./pages/city.html");
+		$(".main").on("click","li",function(){
+			if ($(this).text()=="城市管理") {
+				$("#cont").load("./pages/city.html");
+			}if ($(this).text()=="福利管理") {
+				$("#cont").load("./pages/welfare.html");
+			}if ($(this).text()=="招聘管理") {
+				$("#cont").load("./pages/employ.html");
+			}
+		})
+	})
+</script>

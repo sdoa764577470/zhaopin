@@ -1,0 +1,119 @@
+<style>
+	.container-fluid{
+		height: 80%;
+		/*background-color: blue;*/
+	}
+	.top{
+		height:2rem;
+		background-color: #333;
+		color: #fff;
+		line-height: 2rem;
+		font-size: 1.2rem;
+	}
+	.bottom{
+		/*height:4rem;*/
+		/*line-height: 4rem;*/
+		background-color: #ededed;
+		padding: 1.2rem 1rem;
+
+	}
+	.bottom>ul{
+		list-style: none;
+	}
+	.bottom>ul>li{
+		width: 10%;
+		float: left;
+		margin:10px 0;
+	}
+	.bottom>ul::after{
+		clear: both;
+		content:"";
+		display:block; 
+	}
+	.a_add{
+		margin: .5rem 1rem;
+	}
+	/*#float{
+		float:left;
+		display: inline-block;
+
+	}*/
+	#input_add{
+		width: 20%;
+		/*visibility: hidden;*/
+	}
+</style>
+<div class="container-fluid">
+	<button class="btn btn-primary offset-11"  id="btn_addProvince">添加省份</button>
+	<div class="module">
+		<div class="top">
+			<span style="margin:0 2rem">城市</span>
+		</div>
+		<div class="bottom">
+			<ul class="city_ul">
+				
+			</ul>
+		</div>
+	</div>
+	
+</div>
+<script>
+	$(function(){
+		//重载数据
+		var baseURL="http://47.106.244.1:7777";
+		function reloadData(){
+			var url=baseURL+"/City/findAll";
+			$(".city_ul").empty();
+			$.get(url,function(response){
+				//console.log(response)
+				if (response.status==200) {
+					response.data.forEach(function(item){
+						$(`<li id="`+item.id+`">`+item.name+`</li>`).appendTo(".city_ul");
+					})
+				}else{
+					alert(response.message);
+				}
+ 				$(`<li><a href="#" class="a_add">添加</a></li>
+				
+ 				`).appendTo(".city_ul")
+ 				// $(`<a href="#" class="a_add">添加</a>`).appendTo(".city_ul")
+			})
+		}
+		reloadData();
+		//添加a链接
+		$(".city_ul").on("click",".a_add",function(){
+			$(".a_add").parent().remove();
+			$(".city_ul").append(`<li id="input_add">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="请输入城市名称">
+					<div class="input-group-append">
+						<button class="btn btn-primary btn_add">添加</button>
+					</div>
+				</div>
+			</li>`)
+
+			//$("#input_add").css("visibility","visible");
+			
+		
+		})
+		//添加按钮
+		$(".city_ul").on("click",".btn_add",function(){
+			//alert(1)
+			var url=baseURL+"/City/saveOrUpdate";
+			var data={
+				name:$(this).parent().parent().children().eq(0).val()
+			}
+			console.log(data)
+			$.post(url,data,function(response){
+				if (response.status==200) {
+					console.log(response.message);
+					reloadData();
+				}else{
+					console.log(response.message);
+				}
+			})
+		})
+
+
+	})
+</script>

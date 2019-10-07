@@ -1,0 +1,439 @@
+﻿<div class="main">
+	<div class="container-fluid">
+	<br>
+		<h5 class="mb-5">商家管理</h5>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="input-group mb-3 col-3">
+					<div class="input-group-prepend">
+					    <label class="input-group-text" for="location">所在地</label>
+					</div>
+					<select class="custom-select" name="location" id="location">
+						<option selected>请选择</option>
+					</select>
+				</div>
+				<div class="input-group mb-3 col-3">
+					<div class="input-group-prepend">
+					    <label class="input-group-text" for="industry">行业</label>
+					</div>
+					<select class="custom-select" name="industry" id="industry">
+						<option selected>请选择</option>
+					</select>
+				</div>
+				<div class="input-group mb-3 col-3">
+					<div class="input-group-prepend">
+					    <label class="input-group-text" for="scale">规模</label>
+					</div>
+					<select class="custom-select" name="scale" id="scale">
+						<option selected>请选择</option>
+					</select>
+				</div>
+				<div class=" mb-3 col-3">
+					<button id="reset" class="btn btn-primary">重置</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 表格开始 -->
+	<table class="table business_table table-striped table-bordered text-center">
+	  <thead>
+	      <th scope="col">#</th>
+	      <th scope="col">企业名称</th>
+	      <th scope="col">联系人</th>
+	      <th scope="col">联系方式</th>
+	      <th scope="col">行业</th>
+	      <th scope="col">所在地</th>
+	      <th scope="col">公司规模</th>
+	      <th scope="col">详情</th>
+	      <th scope="col">操作</th>
+	  </thead>
+	  <tbody class="business_table_body">
+	   		
+	  </tbody>
+	</table>
+	<!-- 表格结束 -->
+	<!-- 模态框开始 -->
+	<div class="modal" tabindex="-1" role="dialog" id="modal_id">
+		<div class="modal-dialog" role="document">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title">添加用户信息</h5>
+			        <button type="button" class="close" data-dismiss="modal">
+			          <span>&times;</span>
+			        </button>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+				        <div class="form-group">
+						    <input type="hidden" class="form-control" id="business_modal_id" name="id" >
+						</div>
+						<div class="row">
+							<div class="form-group col-6">
+							    <label for="business_modal_name">公司名称</label>
+							    <input type="text" class="form-control" id="business_modal_name" name="name" placeholder="请输入" >
+							</div>
+							<div class="form-group col-6">
+							    <label for="business_modal_industry">所属行业</label>
+							    <input type="text" class="form-control" id="business_modal_industry" name="industry" placeholder="请输入">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-6">
+							    <label for="business_modal_scale">公司规模</label>
+							    <input type="text" class="form-control" id="business_modal_scale" name="scale" placeholder="请输入">
+							</div>
+							<div class="form-group col-6">
+							    <label for="business_modal_location">所在地</label>
+							    <input type="text" class="form-control" id="business_modal_location" name="location" placeholder="请输入">
+							</div>
+						</div>
+						<div class="row">
+						  	<div class="form-group col-6">
+						    	<label for="business_modal_contactPhone">联系人</label>
+						   		<input type="text" class="form-control" id="business_modal_contactName" name="contactName" placeholder="请输入">
+						 	</div>
+						  	<div class="form-group col-6">
+						    	<label for="business_modal_contactPhone">联系方式</label>
+						    	<input type="text" class="form-control" id="business_modal_contactPhone" name="contactPhone" placeholder="请输入">
+						</div>
+						</div>
+						<div class="form-group row">
+							<div class="col text-left">
+						   		<label for="business_modal_description">公司简介</label>
+							</div>
+						</div>
+						<div class="form-group ml-5">
+							    <textarea  class="form-control" name="description" id="business_modal_description" cols="35" rows="5" placeholder="请输入"></textarea>
+							</div>
+					</form>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+			        <button type="button" class="btn btn-primary" id="business_submit">提交</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+	<!-- 模态框结束 -->	
+</div>
+<script>
+	$(function(){
+		var baseURL="http://47.106.244.1:7777"
+		// function(){
+		// 	var =data
+		// }
+		//重载下拉框
+		function reloadSelect(){
+			var url = baseURL+"/Business/findAll";
+			$.get(url,function(response){
+				var data =response.data;
+				$(".business_table_body").empty();
+				console.log(response)
+				//下拉框去重
+				//去重1
+				var locationArr = [];
+				var locationArr_2 = [];
+				response.data.forEach(function(item){
+					locationArr.push(item.location);
+			
+				})
+				for(i=0;i<locationArr.length;i++){
+					if (locationArr_2.indexOf(locationArr[i])==-1) {
+						locationArr_2.push(locationArr[i]);
+					}
+					//console.log(locationArr_2)
+				}
+				//$("#location").empty();
+				//$("#location").append(<`option selected>请选择</option>`);
+
+				for(key in locationArr_2){
+					//console.log(locationArr_2[key])
+					var newOption1= $(`<option value=`+locationArr_2[key]+`>`+locationArr_2[key]+`</option>`)
+				    $("#location").append(newOption1)
+
+				}
+				// 去重1 结束
+				var industryArr = [];
+				var industryArr_2 = [];
+				response.data.forEach(function(item){
+					industryArr.push(item.industry);
+			
+				})
+				for(i=0;i<industryArr.length;i++){
+					if (industryArr_2.indexOf(industryArr[i])==-1) {
+						industryArr_2.push(industryArr[i]);
+					}
+					//console.log(industryArr_2)
+				}
+				//$("#location").empty();
+				for(key in industryArr_2){
+					//console.log(locationArr_2[key])
+					var newOption2= $(`<option value=`+industryArr_2[key]+`>`+industryArr_2[key]+`</option>`)
+				    $("#industry").append(newOption2)
+
+				}
+				var scaleArr = [];
+				var scaleArr_2 = [];
+				response.data.forEach(function(item){
+					scaleArr.push(item.scale);
+			
+				})
+				for(i=0;i<scaleArr.length;i++){
+					if (scaleArr_2.indexOf(scaleArr[i])==-1) {
+						scaleArr_2.push(scaleArr[i]);
+					}
+					//console.log(scaleArr_2)
+				}
+				for(key in scaleArr_2){
+					var newOption3= $(`<option value=`+scaleArr_2[key]+`>`+scaleArr_2[key]+`</option>`)
+				    $("#scale").append(newOption3)
+
+				}
+			})	
+		}
+		//重载下拉框  结束
+		//执行重载下拉框		
+		reloadSelect();
+		//给详情绑定事件
+		$("tbody").on("click",".dec",function(){
+			$("#").modal("show");
+		})
+		//给详情绑定事件  结束
+		//下拉框搜索
+			function test3(){
+				var data;
+				$("#scale").change(function(){
+					var val = $(this).val()
+					//console.log(val)
+					var obj = {
+						scale:val
+					}
+					$('tbody').empty();
+					$.get(baseURL+'/Business/findByScale',obj,function(res){
+						 data = res.data
+						// console.log(data)
+						//reloadSelect();
+						res.data.forEach(function(item,index){
+							$(`
+								<tr>
+							  	<td><input type="checkbox" value=`+item.id+`></td>
+							  	<td>`+item.name+`</td>
+							  	<td>`+item.contactName+`</td>
+							  	<td>`+item.contactPhone+`</td>
+							  	<td>`+item.industry+`</td>
+							  	<td>`+item.location+`</td>
+							  	<td>`+item.scale+`</td>
+							  	<td><a href="#" class="dec">查看</a></td>
+							  	<td>
+							  		<i class="fa fa-edit btn_upt mr-3"></i>
+									<i class="fa fa-trash btn_del"></i>
+							  	</td>
+							  </tr>
+								`).appendTo('tbody')
+						})
+					})
+
+				})
+			}
+		test3();
+		function test2(){
+				var data;
+				$("#industry").change(function(){
+					var val = $(this).val()
+					//console.log(val)
+					var obj = {
+						industry:val
+					}
+					$('tbody').empty();
+					$.get(baseURL+'/Business/findByIndustry',obj,function(res){
+						 data = res.data
+						// console.log(data)
+						//reloadSelect();
+						// console.log($("#industry option[selected]").text())
+						// if ($("#industry option").text()=="请选择") {
+						// console.log(1)
+						// }
+						res.data.forEach(function(item,index){
+							$(`
+								<tr>
+							  	<td><input type="checkbox" value=`+item.id+`></td>
+							  	<td>`+item.name+`</td>
+							  	<td>`+item.contactName+`</td>
+							  	<td>`+item.contactPhone+`</td>
+							  	<td>`+item.industry+`</td>
+							  	<td>`+item.location+`</td>
+							  	<td>`+item.scale+`</td>
+							  	<td><a href="#" class="dec">查看</a></td>
+							  	<td>
+							  		<i class="fa fa-edit btn_upt mr-3"></i>
+									<i class="fa fa-trash btn_del"></i>
+							  	</td>
+							  </tr>
+								`).appendTo('tbody')
+						})
+					})
+					
+				})
+			}
+		test2();
+		function test1(){
+				var data;
+				$("#location").change(function(){
+					var val = $(this).val()
+					//console.log(val)
+					var obj = {
+						location:val
+					}
+					$('tbody').empty();
+					$.get(baseURL+'/Business/findByLocation',obj,function(res){
+						 data = res.data
+						// console.log(data)
+						//reloadSelect();
+						res.data.forEach(function(item,index){
+							$(`
+								<tr>
+							  	<td><input type="checkbox" value=`+item.id+`></td>
+							  	<td>`+item.name+`</td>
+							  	<td>`+item.contactName+`</td>
+							  	<td>`+item.contactPhone+`</td>
+							  	<td>`+item.industry+`</td>
+							  	<td>`+item.location+`</td>
+							  	<td>`+item.scale+`</td>
+							  	<td><a href="#" class="dec">查看</a>
+							  	</td>
+							  	<td>
+							  		<i class="fa fa-edit btn_upt mr-3"></i>
+									<i class="fa fa-trash btn_del"></i>
+							  	</td>
+							  </tr>
+								`).appendTo('tbody')
+						})
+					})
+
+				})
+			}
+		test1();
+		//下拉框搜索 结束
+		//执行下拉框搜索
+
+		//修改功能
+		$("tbody").on("click",".btn_upt",function(){
+			$("h5.modal-title").text("修改商家信息")
+			$("#modal_id").modal("show");
+			$("#business_modal_id").val($(this).parents("tr").children().eq(0).children().eq(0).val())
+			$("#business_modal_name").val($(this).parents("tr").children().eq(1).text())
+			$("#business_modal_contactName").val($(this).parents("tr").children().eq(2).text()) 
+			$("#business_modal_contactPhone").val($(this).parents("tr").children().eq(3).text()) 
+			$("#business_modal_industry").val($(this).parents("tr").children().eq(4).text()) 
+			$("#business_modal_location").val($(this).parents("tr").children().eq(5).text()) 
+			$("#business_modal_scale").val($(this).parents("tr").children().eq(6).text()) 
+			$("#business_modal_description").val($(this).parents("tr").children().eq(7).text()) 
+			
+		})
+		//提交功能
+		$("#modal_id").on("click","#business_submit",function(){
+			var url=baseURL+"/Business/saveOrUpdate";
+			if ($("#business_modal_id").val()) {
+				data={
+					id:$("#business_modal_id").val(),
+					name:$("#business_modal_name").val(),
+					contactName:$("#business_modal_contactName").val(),
+					contactPhone:$("#business_modal_contactPhone").val(),
+					industry:$("#business_modal_industry").val(),
+					location:$("#business_modal_location").val(),
+					scale:$("#business_modal_scale").val(),
+					description:$("#business_modal_description").val()
+				}
+			// }else{
+			// 	data={
+			// 		name:$("#business_modal_name").val(),
+			// 		contactName:$("#business_modal_contactName").val(),
+			// 		contactPhone:$("#business_modal_contactPhone").val(),
+			// 		industry:$("#business_modal_industry").val(),
+			// 		location:$("#business_modal_location").val(),
+			// 		scale:$("#business_modal_scale").val(),
+			// 		description:$("#business_modal_description").val()
+			// 	}
+			}
+			$.post(url,data,function(response){
+				//console.log(response)
+				if (response.status==200) {
+					console.log($("#business_modal_id").val());
+					$("#modal_id").modal("hide");
+					console.log(response.message);
+					reloadData();
+					reloadSelect();
+				}else{
+					alert(response.message);
+				}
+			})
+			reloadData();
+		})
+		//提交功能 结束
+		//修改功能 结束
+		//删除功能
+		$("tbody").on("click",".btn_del",function(){
+			var url = baseURL+"/Business/deleteById"
+			data = {
+				id:$(this).parents("tr").children().eq(0).children().eq(0).val(),
+			}
+			$.post(url,data,function(response){
+				console.log(response)
+				if(response.status==200){
+					alert("删除成功")
+					reloadData();
+				}else(
+					alert("删除失败")
+				)
+			})
+			reloadData();
+		})
+		//删除功能  结束
+		//重载用户数据
+		function reloadData(){
+			var url = baseURL+"/Business/findAll";
+			$.get(url,function(response){
+				//var data =response.data;
+				$(".business_table_body").empty();
+				console.log(response)
+				response.data.forEach(function(item){
+					var newTr = $(` <tr>
+				      <td><input type="checkbox" value="`+item.id+`" name="id" id="business_id"/></td>
+				      <td>`+item.name+`</td>
+				      <td>`+item.contactName+`</td>
+				      <td>`+item.contactPhone+`</td>
+				      <td>`+item.industry+`</td>
+				      <td>`+item.location+`</td>
+				      <td>`+item.scale+`</td>
+				      <td>
+				      	<a href="#" class="dec">查看</a></td>
+				      <td>
+						<i class="fa fa-edit btn_upt mr-3"></i>
+						<i class="fa fa-trash btn_del"></i>
+					
+				      </td>
+				    </tr>`)
+				    $(".business_table_body").append(newTr)
+				})
+			})
+		}
+		reloadData();
+		//reset
+		$("#reset").click(function(){
+			reloadData();
+		})
+	})
+</script>
+<style>
+	.show{
+		background:rgba(105,105,105,0.5);
+		/*background-color:#666;
+		opacity: .9*/;
+	}
+	.modal-backdrop.show{
+		z-index: -1;
+	}
+	.modal-content{
+		top: 50px;
+	}
+</style>

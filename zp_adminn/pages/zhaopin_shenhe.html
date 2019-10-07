@@ -1,0 +1,237 @@
+<style>
+	.status_green{
+		color: green;
+	}
+	.status_red{
+		color:red;
+	}
+	.bg-success,.bg-danger{
+		display: inline-block;	
+	}
+</style>
+<div class="main">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="input-group mb-3 col-3">
+				<div class="input-group-prepend">
+				    <label class="input-group-text" for="location">职业类型</label>
+				</div>
+				<select class="custom-select" name="location" id="location">
+					<option selected>请选择</option>
+				</select>
+			</div>
+			<div class="input-group mb-3 col-7">
+				<button id="reset" class="btn btn-primary">重置</button>
+			</div>
+			<div class="col-2">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="请输入关键字">
+					<div class="input-group-append">
+						<button id="search" class="btn btn-outline-primary">搜索</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 表格开始 -->
+	<table class="table business_table table-striped table-bordered text-center">
+		<thead>
+		    <th scope="col">#</th>
+		    <th scope="col">招聘标题</th>
+		    <th scope="col">发布人</th>
+		    <th scope="col">联系方式</th>
+		    <th scope="col">职位</th>
+		    <th scope="col">状态</th>
+		    <th scope="col">发布时间</th>
+		   	<th scope="col">详情</th>
+		    <th scope="col">操作</th>
+		</thead>
+		<tbody class="business_table_body_1">
+		   		
+		</tbody>
+	</table>
+	<!-- 表格结束 -->
+</div>
+<script>
+	$(function(){
+		//时间戳
+		var dateParse=(dataString)=>{
+		  	if(dataString){
+			    let date = new Date(dataString);
+			    let Y = date.getFullYear() + '-';
+			    let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+			    let D = (date.getDate()< 10 ? '0'+date.getDate() : date.getDate())+' ';
+			    let h = (date.getHours()< 10 ? '0'+date.getHours() : date.getHours())+ ':';
+			    let m = (date.getMinutes()< 10 ? '0'+date.getMinutes() : date.getMinutes())+ ':';
+			    let s = (date.getSeconds()< 10 ? '0'+date.getSeconds() : date.getSeconds());
+			    //console.log(1)
+			    return Y+M+D+h+m+s;
+			}else{
+		    return '';
+	  		}		
+		}
+		var baseURL="http://47.106.244.1:7777";
+		//重载数据
+		function reloadData(){
+			var url = baseURL+"/Employment/findAll";
+			$.get(url,function(response){
+				//var data =response.data;
+				$(".business_table_body_1").empty();
+				console.log(response)
+				response.data.forEach(function(item){
+					if (item.status=="招聘中"||item.status=="招聘完结") {
+						if (item.auditStatus=="待审核") {
+							var newTr1 = $(` <tr>
+						    <td><input type="checkbox" value="`+item.id+`" name="id" id="business_id"/></td>
+						    <td>`+item.title+`</td>
+						    <td>`+item.contactName+`</td>
+						    <td>`+item.contactPhone+`</td>
+						    <td>`+item.job+`</td>
+						    <td>`+item.status+`</td>
+						    <td>`+dateParse(item.publishTime)+`</td>
+						    <td>
+						      	<a href="#" class="dec">详情</a></td>
+						    <td>
+						     	<div class="bg-success mr-3" style="width:30%;margin:0 auto;cursor:pointer">通过</div>
+						     	<div class="bg-danger" style="width:30%;margin:0 auto;cursor:pointer">拒绝</div> 	
+						    </td>
+						    </tr>`)
+						     $(".business_table_body_1").append(newTr1);
+						}else if (item.auditStatus=="审核通过") {
+							var newTr2 = $(` <tr>
+						    <td><input type="checkbox" value="`+item.id+`" name="id" id="business_id"/></td>
+						    <td>`+item.title+`</td>
+						    <td>`+item.contactName+`</td>
+						    <td>`+item.contactPhone+`</td>
+						    <td>`+item.job+`</td>
+						    <td>`+item.status+`</td>
+						    <td>`+dateParse(item.publishTime)+`</td>
+						    <td>
+						      	<a href="#" class="dec">详情</a></td>
+						    <td class="status_green">`+item.auditStatus+`</td>
+						    </tr>`)
+						     $(".business_table_body_1").append(newTr2);
+						}else if (item.auditStatus=="拒绝") {
+							var newTr3 = $(` <tr>
+						    <td><input type="checkbox" value="`+item.id+`" name="id" id="business_id"/></td>
+						    <td>`+item.title+`</td>
+						    <td>`+item.contactName+`</td>
+						    <td>`+item.contactPhone+`</td>
+						    <td>`+item.job+`</td>
+						    <td>`+item.status+`</td>
+						    <td>`+dateParse(item.publishTime)+`</td>
+						    <td>
+						      	<a href="#" class="dec">详情</a></td>
+						    <td class="status_red">`+"已"+``+item.auditStatus+`</td>
+
+						    </tr>`)
+						     $(".business_table_body_1").append(newTr3);
+						}
+						
+					}else{
+						//console.log("不符合筛选要求"+Math.random())
+					}
+				})
+			})
+		}
+		reloadData();
+		//拒绝按钮
+		$("tbody").on("click",".bg-danger",function(){
+			var data1={
+				id:$(this).parents("tr").children().eq(0).children().eq(0).val()};
+			$.get(baseURL+"/Employment/findById",data1,function(response1){
+				console.log(response1.data);
+				var data2={
+					id:response1.data.id,
+					name:response1.data.name,
+					contactName:response1.data.contactName,
+					contactPhone:response1.data.contactPhone,
+					industry:response1.data.industry,
+					location:response1.data.location,
+					scale:response1.data.scale,
+					// publishTime:response1.data.publishTime,
+					description:response1.data.description,
+					// endTime:response1.data.endTime,
+					// startTime:response1.data.startTime,
+					job:response1.data.job,
+					num:response1.data.num,
+					province:response1.data.province,
+					salary:response1.data.salary,
+					status:response1.data.status,
+					title:response1.data.title,
+					welfare:response1.data.welfare,
+					businessId:response1.data.businessId,
+					auditStatus:"拒绝"
+				}
+				console.log(data2)
+				if (data2.id) {
+					var url=baseURL+"/Employment/saveOrUpdate";
+					$.post(url,data2,function(response2){
+						console.log(response2);
+						if (response2.status==200) {
+							console.log(response2.message);
+							reloadData();
+						}else{
+							alert(response2.message);
+						}
+					})
+				}
+
+			})
+			
+			
+		})
+		//通过按钮
+		$("tbody").on("click",".bg-success",function(){
+			var data1={
+				id:$(this).parents("tr").children().eq(0).children().eq(0).val()};
+			$.get(baseURL+"/Employment/findById",data1,function(response1){
+				console.log(response1.data);
+				var data2={
+					id:response1.data.id,
+					name:response1.data.name,
+					contactName:response1.data.contactName,
+					contactPhone:response1.data.contactPhone,
+					industry:response1.data.industry,
+					location:response1.data.location,
+					scale:response1.data.scale,
+					// publishTime:response1.data.publishTime,
+					description:response1.data.description,
+					// endTime:response1.data.endTime,
+					// startTime:response1.data.startTime,
+					job:response1.data.job,
+					num:response1.data.num,
+					province:response1.data.province,
+					salary:response1.data.salary,
+					status:response1.data.status,
+					title:response1.data.title,
+					welfare:response1.data.welfare,
+					businessId:response1.data.businessId,
+					auditStatus:"审核通过"
+				}
+				console.log(data2)
+				if (data2.id) {
+					var url=baseURL+"/Employment/saveOrUpdate";
+					$.post(url,data2,function(response2){
+						console.log(response2);
+						if (response2.status==200) {
+							console.log(response2.message);
+							reloadData();
+						}else{
+							alert(response2.message);
+						}
+					})
+				}
+
+			})
+			
+		})
+		//reset
+		$("#reset").click(function(){
+			reloadData();
+		})
+		//
+
+
+	})
+</script>

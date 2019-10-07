@@ -1,0 +1,224 @@
+<style>
+	.status_green{
+		color: green;
+	}
+	.status_red{
+		color:red;
+	}
+</style>
+<div class="row">
+	<div class="input-group mb-3 col-4">
+		<select class="custom-select" name="location" id="location1">
+			<option selected>请选择</option>
+		</select>
+	</div>
+	<div class="col-2">
+		<button id="reset" class="btn btn-primary">重置</button>
+	</div>
+</div>
+
+<!-- 表格开始 -->
+<table class="table table-hover text-center ">
+	<thead class="thead-dark">
+	    <th scope="col">#</th>
+	    <th scope="col">福利名称</th>
+	    <th scope="col"></th>
+	    <th scope="col"></th>
+	    <th scope="col"></th>
+	    <th scope="col"></th>
+	    <th scope="col"></th>
+	    <th scope="col">状态</th>
+	    <th scope="col">操作</th>
+	</thead>
+	<tbody class="">
+	   		
+	</tbody>
+</table>
+<!-- 表格结束 -->
+<script>
+	$(function(){
+		//重载
+		var baseURL="http://47.106.244.1:7777"
+		function reloadData(){
+			var url = baseURL+"/Welfare/findAll";
+			$("tbody").empty();
+			$.get(url,function(response){
+				//console.log(response)
+				response.data.forEach(function(item){
+					if (item.status=="使用中") {
+						var newTr1 = $(` <tr>
+						    <td><input type="checkbox" value="`+item.id+`"/></td>
+						    <td>`+item.name+`</td>
+						    <td></td>
+						    <td></td>
+						    <td></td>
+						    <td></td>
+						    <td></td>
+						    <td class="status_green">`+item.status+`</td>
+						    <td>
+						     	<div class="bg-danger" style="width:30%;margin:0 auto;cursor:pointer">冻结</div> 	
+						    </td>
+					    </tr>`);
+					    $("tbody").append(newTr1);
+					}else if (item.status=="被冻结") {
+						var newTr2 = $(` <tr>
+						    <td><input type="checkbox" value="`+item.id+`"/></td>
+						    <td>`+item.name+`</td>
+						    <td></td>
+						    <td></td>
+						    <td></td>
+						    <td></td>
+						    <td></td>
+						    <td class="status_red">`+item.status+`</td>
+						    <td>
+						     	<div class="bg-success" style="width:30%;margin:0 auto;cursor:pointer">恢复</div> 	
+						    </td>
+					    </tr>`);
+					    $("tbody").append(newTr2);
+
+					}
+				})
+			})
+		}
+		reloadData();
+		//冻结
+		$("tbody").on("click",".bg-danger",function(){
+			var url=baseURL+"/Welfare/saveOrUpdate";
+			var data={
+				id:$(this).parents("tr").children().eq(0).children().eq(0).val(),
+				name:$(this).parents("tr").children().eq(1).text(),
+				status:"被冻结"
+				// status:$(this).parents("tr").children().eq(7).text()
+			}
+			//console.log(data);
+			$.post(url,data,function(response){
+				//console.log(response);
+				if (response.status==200) {
+					console.log(response.message);
+					reloadData();
+				}else{
+					alert(response.message);
+				}
+			})
+			
+		})
+		//恢复
+		$("tbody").on("click",".bg-success",function(){
+			var url=baseURL+"/Welfare/saveOrUpdate";
+			var data={
+				id:$(this).parents("tr").children().eq(0).children().eq(0).val(),
+				name:$(this).parents("tr").children().eq(1).text(),
+				status:"使用中"
+				// status:$(this).parents("tr").children().eq(7).text()
+			}
+			//console.log(data);
+			$.post(url,data,function(response){
+				//console.log(response);
+				if (response.status==200) {
+					console.log(response.message);
+					reloadData();
+				}else{
+					alert(response.message);
+				}
+			})
+		})
+		//重载下拉框
+		function reloadSelect(){
+			var url=baseURL+"/Welfare/findAll";
+			var resumeArr1=[];
+			var resumeArr2=[];
+			$.get(url,function(response){
+				//console.log(response)
+				if (response.status==200) {
+					response.data.forEach(function(item){
+						resumeArr1.push(item.name);
+					})
+				}else{
+					alert(response.message);
+				}
+ 				//console.log(resumeArr1);
+ 				for(var i=0;i<resumeArr1.length;i++){
+ 					if (resumeArr2.indexOf(resumeArr1[i])==-1) {
+ 						resumeArr2.push(resumeArr1[i])
+ 					}
+ 				}
+ 				//console.log(resumeArr2)
+ 				$("select[name='location']").empty();
+ 				resumeArr2.forEach(function(item){
+ 					//console.log(typeof item)
+ 					$(`<option value="`+item+`">`+item+`</option>`).appendTo("select[name='location']")
+ 				})
+ 				$("select[name='location']").append($(`<option selected>请选择</option>`));
+ 				
+			})
+		}
+		reloadSelect();
+		//下拉框搜索
+		function executeChange(){
+			//var data;
+			$("select[name='location']").change(function(){
+				var val=$(this).val();
+				console.log($(this).val());
+				var url=baseURL+"/Welfare/findAll";
+				$("tbody").empty();
+				$.get(url,function(response){
+					if (response.status==200) {
+						//console.log(response.data)
+						response.data.forEach(function(item){
+							//console.log(item)
+							if (item.name==val) {
+								if (item.status=="使用中") {
+									var newTr1 = $(` <tr>
+									    <td><input type="checkbox" value="`+item.id+`"/></td>
+									    <td>`+item.name+`</td>
+									    <td></td>
+									    <td></td>
+									    <td></td>
+									    <td></td>
+									    <td></td>
+									    <td class="status_green">`+item.status+`</td>
+									    <td>
+									     	<div class="bg-danger" style="width:30%;margin:0 auto;cursor:pointer">冻结</div> 	
+									    </td>
+								    </tr>`);
+								    $("tbody").append(newTr1);
+								}else if (item.status=="被冻结") {
+									var newTr2 = $(` <tr>
+									    <td><input type="checkbox" value="`+item.id+`"/></td>
+									    <td>`+item.name+`</td>
+									    <td></td>
+									    <td></td>
+									    <td></td>
+									    <td></td>
+									    <td></td>
+									    <td class="status_red">`+item.status+`</td>
+									    <td>
+									     	<div class="bg-success" style="width:30%;margin:0 auto;cursor:pointer">恢复</div> 	
+									    </td>
+								    </tr>`);
+								    $("tbody").append(newTr2);
+
+								}	
+							}
+						})
+					}else{
+						alert(response.message)
+					}
+				})
+			})
+		}
+		executeChange();
+		reloadSelect();
+		//批量删除
+		//翻页
+		//reset 
+		$("#reset").click(function(){
+			reloadData();
+		})
+	})
+</script>
+<!-- <style>
+	.a{
+		text
+	}
+</style> -->
