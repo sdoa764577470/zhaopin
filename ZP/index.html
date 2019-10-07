@@ -1,0 +1,596 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style/style.css"/>
+ 
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <style>
+        #jobs span,#city span,#welfare span,#con_menu span{
+            display: none;
+        } 
+        #jobs li,#city li,#welfare li{
+            width: 10%;
+            margin:10px 0;
+            text-align: center;
+        }
+        .modal{
+            display: none;
+            width: 100%;
+            height: 100%;
+            position:fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(105,105,105,0.5);
+        }
+        .modal_show{
+            display: block;
+        }
+        .modal-dialog{
+            width: 720px;
+            margin:0 auto;
+            padding: 40px 60px;
+            border-radius: 8px;
+            /*background-color: pink;*/
+        }
+        .modal .modal-content{
+            height: 800px;
+            width: 600px;
+            background-color: #fff;
+            padding: 40px 60px;
+            border-radius: 8px;
+
+        }
+        .modal-header,.modal-footer{
+            height: 15%;
+        }
+        .modal-header,{
+            text-align: center;
+        }
+        .modal-header{
+            font-size: 2rem;
+        }  
+        .modal-header>hr{
+            /*font-size: 1px;*/
+        } 
+        .modal-body{
+            height: 70%;
+        }
+        .modal-body>.part{
+            font-size: 1.5rem;
+        }
+        .modal-body>.part>div.label{
+            /*display: inline-block;*/
+        }
+        .modal-body>.part #gender_parent{
+            font-size: 1.1rem;
+
+        }
+        .modal-body>.part input{
+            width: 100%;
+        }
+        .modal-body>.part #gender_male,
+        .modal-body>.part #gender_female{
+            width:10%;
+        }
+        .modal-footer{
+            float: right;
+            margin: 30px 10px;
+        }
+        .modal-footer button{
+            border-radius: 2px;
+            border:1px solid #999;
+            margin-top: 20px;
+            margin-right: 20px;
+            width: 50px;
+            height: 30px;
+            cursor: pointer;
+        }
+        .modal-footer button:hover{
+            background-color:rgba(255,250,250,.9);
+
+        }
+        .modal-footer button.btn_close{
+
+        }
+
+        /*#jobs a{
+           margin:0;
+        }*/    
+    </style>
+   
+</head>
+<body>
+    <div class="head">
+        <div class="h_c">
+            <div class="hl">
+                <p>北京 <span>[切换城市]</span></p>
+            </div>
+            <div class="hr">
+                <p><a href="javascript:void(0);">登录 / 注册</a></p>
+                <p><a href="javascript:void(0);">个人中心 <img src="images/index/u113.png" /></a></p>
+                <p><a href="javascript:void(0);">商家中心 <img src="images/index/u113.png" /></a></p>
+            </div>
+        </div>
+    </div>
+    <div class="h_se">
+        <div class="s_logo">
+            <img id="u135_img" class="img " src="images/index/u135.png">
+        </div>
+        <div class="s_search">
+            <input type="text" id="ss" />
+            <input type="button" id="sb" value="搜职位" />
+            <img  id="si" src="images/index/u138.png" />
+            <ul>
+                <li><a href="javascript:void(0);">收营员</a></li>
+                <li><a href="javascript:void(0);">收营员</a></li>
+                <li><a href="javascript:void(0);">收营员</a></li>
+                <li><a href="javascript:void(0);">收营员</a></li>
+                <li><a href="javascript:void(0);">收营员</a></li>
+            </ul>
+        </div>
+ 
+    </div>
+    <div class="hm">
+        <div class="hm_1">
+            <div class="hm_1_l">职位：</div>
+            <div class="hm_1_r">
+                <ul id="jobs">
+                   <!--  <li><a href="javascript:void(0)javascript:void(0);"   class="s">全部</a></li>
+           
+                    <li><a href="javascript:void(0);" >超市/零售</a></li>
+                    <li><a href="javascript:void(0);">影视/娱乐</a></li>
+                    <li><a href="javascript:void(0);">教育培训</a></li>
+                    <li><a href="javascript:void(0);">餐饮</a></li>
+                    <li><a href="javascript:void(0);">客服</a></li>
+                    <li><a href="javascript:void(0);">销售</a></li>
+                    <li><a href="javascript:void(0);">仓储/物流</a></li>
+                    <li><a href="javascript:void(0);">实习生</a></li>
+                    <li><a href="javascript:void(0);">家政/安保</a></li>
+                    <li><a href="javascript:void(0);">翻译</a></li>
+                    <li><a href="javascript:void(0);">美容美</a></li> -->
+                </ul>
+            </div>
+            <div class="c"></div>
+        </div>
+        <div class="hm_1">
+            <div class="hm_1_l">地点：</div>
+            <div class="hm_1_r">
+                <ul id="city">
+                   <!--  <li><a href="javascript:void(0);"   class="s">全部</a></li>
+                    <li><a href="javascript:void(0);">海淀</a></li>
+                    <li><a href="javascript:void(0);">海淀</a></li>
+                    <li><a href="javascript:void(0);">海淀</a></li>
+                    <li><a href="javascript:void(0);">海淀</a></li>
+                    <li><a href="javascript:void(0);">海淀</a></li> -->
+                </ul>   
+            </div>
+            <div class="c"></div>
+        </div>
+        <div class="hm_1">
+            <div class="hm_1_l">福利：</div>
+            <div class="hm_1_r">
+                <ul id="welfare">
+                    <!-- <li><a href="javascript:void(0);"   class="s">全部</a></li>
+                    <li><a href="javascript:void(0);">五险一金</a></li>
+                    <li><a href="javascript:void(0);">五险一金</a></li>
+                    <li><a href="javascript:void(0);">五险一金</a></li>
+                    <li><a href="javascript:void(0);">五险一金</a></li>
+                    <li><a href="javascript:void(0);">五险一金</a></li> -->
+                    
+                </ul>
+            </div>
+            <div class="c"></div>
+        </div>
+        <div class="hm_1 b">
+            <div class="hm_1_l">已选：</div>
+            <div class="hm_1_r">
+                <div class="yx">超市/零售 - 收营员 <img id="u192_img" class="img " src="images/index/u192.png"></div>
+            </div>
+            <div class="c"></div>
+        </div>
+    </div>
+
+    <div id="con_menu">
+        <!-- <div class="m">
+            <h4>190/天上一休一连锁超市急招营业员</h4>
+            <div class="m_1">4000-5000 元/月</div>
+            <div class="w">
+            <div class="m_2 c1">五险一金</div>
+            <div class="m_2 c2">包吃</div>
+            <div class="m_2 c3">包住</div>
+            </div>
+            <div class="m_9">
+                <p>工作时间：全职工作</p>
+                <p>工作类型：收银员</p>
+                <p>招聘人数：10人</p>
+                <p>工作地点：海淀知春路</p>
+            </div>
+            <div class="m_3">一键报名</div>
+            
+        </div>
+        <div class="m">
+            <h4>190/天上一休一连锁超市急招营业员</h4>
+            <div class="m_1">4000-5000 元/月</div>
+            <div class="w">
+            <div class="m_2 c1">五险一金</div>
+            <div class="m_2 c2">包吃</div>
+            <div class="m_2 c3">包住</div>
+            </div>
+            <div class="m_9">
+                <p>工作时间：全职工作</p>
+                <p>工作类型：收银员</p>
+                <p>招聘人数：10人</p>
+                <p>工作地点：海淀知春路</p>
+            </div>
+            <div class="m_3">一键报名</div>
+            
+        </div>
+        <div class="m">
+            <h4>190/天上一休一连锁超市急招营业员</h4>
+            <div class="m_1">4000-5000 元/月</div>
+            <div class="w">
+            <div class="m_2 c1">五险一金</div>
+            <div class="m_2 c2">包吃</div>
+            <div class="m_2 c3">包住</div>
+            </div>
+            <div class="m_9">
+                <p>工作时间：全职工作</p>
+                <p>工作类型：收银员</p>
+                <p>招聘人数：10人</p>
+                <p>工作地点：海淀知春路</p>
+            </div>
+            <div class="m_3">一键报名</div>
+            
+        </div>
+        <div class="m">
+            <h4>190/天上一休一连锁超市急招营业员</h4>
+            <div class="m_1">4000-5000 元/月</div>
+            <div class="w">
+            <div class="m_2 c1">五险一金</div>
+            <div class="m_2 c2">包吃</div>
+            <div class="m_2 c3">包住</div>
+            </div>
+            <div class="m_9">
+                <p>工作时间：全职工作</p>
+                <p>工作类型：收银员</p>
+                <p>招聘人数：10人</p>
+                <p>工作地点：海淀知春路</p>
+            </div>
+            <div class="m_3">一键报名</div>
+            
+        </div> -->
+    </div>
+
+    <div class="ym">
+        <ul>
+            <li>&lt;</li>
+            <li>1</li>
+            <li>2</li>
+            <li>...</li>
+            <li>10</li>
+            <li>&gt;</li>
+        </ul>
+    </div>
+
+    <div class="f" style=" border:1px solid #999;">
+        
+        ©2015-2019 ####################有限公司 ##ICP备#############号 ##公网安备###############号 联系电话：####-###########
+    </div>
+    <div class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>快速报名</h5>
+                    <br>
+                    <hr>
+                </div>
+                <div class="modal-body">
+                    <!-- form -->
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="username">用户名:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="username" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="password">密码:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="password" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="realname">姓名:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="realname" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="gender">性别:</label>
+                        </div>
+                        <div id="gender_parent">
+                            <label for="gender">
+                                <input id="gender_male" type="radio" name="gender" value="male" checked>男
+                            </label>
+                            <label for="gender_female">
+                                <input id="gender_female" type="radio" name="gender" value="female">女
+                            </label>
+                           <!--  <input type="radio" class="gender" value="gender_male">男
+                            <input type="radio" class="gender" value="gender_female">女
+                            -->
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="birth">出生年月:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="birth" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="telephone">手机号:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="telephone" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="education">最高学历:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="education" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                    <div class="part">
+                        <div class="label" style="margin-bottom:8px;">
+                            <label for="workTime">工作时间:</label>
+                        </div>
+                        <div>
+                            <input type="text" name="workTime" placeholder="请输入" style="height:30px;font-size:1.1rem;padding-left:10px;border-radius:4px;border:1px solid #999;">
+                        </div>
+                    </div>
+                        <!-- / form -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn_close">关闭</button>
+                    <button class="btn_submit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            var baseURL="http://47.106.244.1:7777";
+            ///重载jobs
+            function reloadJobs(){
+                var url=baseURL+"/Jobs/findAll";
+                $("#jobs").empty();
+                $("#jobs").append(`<li><a href="javascript:void(0)javascript:void(0);"   class="s">全部</a></li>`)
+                //去重
+                $.get(url,function(response){
+                    if (response.status==200) {
+                        //console.log(response)
+                        var cityArr=[];
+                        response.data.forEach(function(item){
+                            if (cityArr.indexOf(item.name)==-1) {
+                                cityArr.push(item.name)
+                            }
+                            // $(`<li>
+                            //     <a href="javascript:void(0);">`+item.name+`</a>
+                            //     <span>`+item.id+`</span>
+                            //     <span>`+item.jobTypeId+`</span>
+                             // </li>`).appendTo("#jobs");
+
+                        })
+                        //console.log(cityArr);
+                        for(key in  cityArr){
+                            var newLi=$(`<li>
+                                 <a href="javascript:void(0);">`+cityArr[key]+`</a>
+                            </li>`);
+                            //console.log(cityArr[key])
+                            $("#jobs").append(newLi);
+                        }
+                    }
+                })
+            }
+            reloadJobs();
+            //jobs 类名s变更
+            $("#jobs").on("click","a",function(){
+                $("#jobs a").removeClass("s");
+                $(this).addClass("s");
+            })
+            //jobs内容渲染
+            function reloadAllJobs(){
+                var url=baseURL+"/Employment/findAll";
+                $.get(url,function(response){
+                    if (response.status==200) {
+                        $("#con_menu").empty();
+                        response.data.forEach(function(item){
+                                $(`<div class="m">
+                                        <h4>`+item.title+`</h4>
+                                        <div class="m_1">`+item.salary+` 元/月</div>
+                                        <div class="w">
+                                        <div class="m_2 c1">`+item.welfare+`</div>
+                                    </div>
+                                    <div class="m_9">
+                                        <p>工作时间：`+item.workingHours+`小时</p>
+                                        <p>工作类型：`+item.job+`</p>
+                                        <p>招聘人数：`+item.num+`人</p>
+                                        <p>工作地点：`+item.city+`</p>
+                                    </div>
+                                    <div class="m_3">
+                                        一键报名
+                                        <span>`+item.id+`</span>
+                                    </div>
+                                </div>`).appendTo("#con_menu")
+                        })
+                    }
+                })
+            }
+            reloadAllJobs();
+            //jobs 同job的内容渲染
+
+            $("#jobs").on("click","a",function(){
+                var url=baseURL+"/Employment/findAll";
+                var jobName=$(this).text();
+                $.get(url,function(response){
+                    if (response.status==200) {
+                        $("#con_menu").empty();
+                        response.data.forEach(function(item){
+                            if (item.job==jobName) {
+                                $(`<div class="m">
+                                        <h4>`+item.title+`</h4>
+                                        <div class="m_1">`+item.salary+` 元/月</div>
+                                        <div class="w">
+                                        <div class="m_2 c1">`+item.welfare+`</div>
+                                    </div>
+                                    <div class="m_9">
+                                        <p>工作时间：`+item.workingHours+`小时</p>
+                                        <p>工作类型：`+item.job+`</p>
+                                        <p>招聘人数：`+item.num+`人</p>
+                                        <p>工作地点：`+item.city+`</p>
+                                    </div>
+                                    <div class="m_3">一键报名</div>
+                                </div>`).appendTo("#con_menu")
+                            }
+                        })
+                    }
+                })
+            })
+            //重载城市
+            function reloadCity(){
+                var url=baseURL+"/City/findAll";
+                $("#city").empty();
+                 $("#city").append(`<li><a href="javascript:void(0)javascript:void(0);"   class="s">全部</a></li>`)
+                $.get(url,function(response){
+                    if (response.status==200) {
+                        var cityArr=[];
+                        response.data.forEach(function(item){
+                            if (cityArr.indexOf(item.name)==-1) {
+                                cityArr.push(item.name)
+                            }
+                        })
+                        //console.log(cityArr);
+                        for(key in  cityArr){
+                            var newLi=$(`<li>
+                                 <a href="javascript:void(0);">`+cityArr[key]+`</a>
+                            </li>`);
+                            //console.log(cityArr[key])
+                            $("#city").append(newLi);
+                        }
+                        // response.data.forEach(function(item){
+                        //     $(`<li>
+                        //         <a href="javascript:void(0);">`+item.name+`</a>
+                        //         <span>`+item.id+`</span>
+                        //         <span>`+item.provinceId+`</span>
+                        //     </li>`).appendTo("#city");
+                        // })
+                    }
+                })
+            }
+            reloadCity();
+            //city 类名s变更
+            $("#city").on("click","a",function(){
+                $("#city a").removeClass("s");
+                $(this).addClass("s");
+            })
+            //重载福利
+            function reloadWelfare(){
+                var url=baseURL+"/Welfare/findAll";
+                $("#welfare").empty();
+                 $("#welfare").append(`<li><a href="javascript:void(0)javascript:void(0);"   class="s">全部</a></li>`)
+                $.get(url,function(response){
+                    if (response.status==200) {
+                        var cityArr=[];
+                        response.data.forEach(function(item){
+                            if (cityArr.indexOf(item.name)==-1) {
+                                cityArr.push(item.name)
+                            }
+                        })
+                        //console.log(cityArr);
+                        for(key in  cityArr){
+                            var newLi=$(`<li>
+                                 <a href="javascript:void(0);">`+cityArr[key]+`</a>
+                            </li>`);
+                            //console.log(cityArr[key])
+                            $("#welfare").append(newLi);
+                        }
+                        // response.data.forEach(function(item){
+                        //     $(`<li>
+                        //         <a href="javascript:void(0);">`+item.name+`</a>
+                        //         <span>`+item.id+`</span>
+                        //         <span>`+item.status+`</span>
+                        //     </li>`).appendTo("#welfare");
+                        // })
+                    }
+                })
+            }
+            reloadWelfare();
+            //welfare 类名s变更
+            $("#welfare").on("click","a",function(){
+                $("#welfare a").removeClass("s");
+                $(this).addClass("s");
+            })
+            //一建报名
+            $("#con_menu").on("click",".m_3",function(){
+                employmentId=$(this).find("span").text();
+                $(".modal").addClass("modal_show");
+            })
+            //关闭按钮
+            $(".btn_close").click(function(){
+                $(".modal").removeClass("modal_show");
+            })
+            //提交按钮
+            $(".btn_submit").click(function(){
+                var url=baseURL+"/Jobhunter/quickRegistration";
+                var data={
+                    employmentId:employmentId,
+                    username:$("input[name=username]").val(),
+                    realname:$("input[name=realname]").val(),
+                    birth:$("input[name=birth]").val(),
+                    education:$("input[name=education]").val(),
+                    workTime:$("input[name=workTime]").val(),
+                    telephone:$("input[name=telephone]").val(),
+                    gender:$("input[type=radio]:checked").val()
+                    // username:$(".modal").find("input[name=username]")
+                    // realname:$(".modal").find("input[name=realname]"),
+                    // realname:$(".modal").find("input[name=realname]"),
+                }
+                // console.log(data)
+                $.post(url,data,function(response){
+                 //console.log(employmentId)
+                 // console.log(response)
+                    if (response.status==200) {
+                        console.log(response.message);
+                        $(".modal").removeClass("modal_show");
+                        reloadJobs();
+                    }else{
+                        $(".modal").removeClass("modal_show");
+                        alert(response.message);
+                    }
+
+                })
+            })
+
+
+
+        })
+    </script>
+
+</body>
+</html>
